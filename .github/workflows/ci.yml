@@ -7,8 +7,8 @@ on:
     branches: ["main", "master"]
 
 jobs:
-  build:
-    name: Build & Typecheck
+  build-devpulse:
+    name: Build devpulse
     runs-on: ubuntu-latest
 
     defaults:
@@ -33,4 +33,69 @@ jobs:
         run: npm run build
 
       - name: Typecheck
+        run: npm run typecheck
+
+  build-codemap:
+    name: Build codemap
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: tools/codemap
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: tools/codemap/package-lock.json
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build library + CLI
+        run: npm run build
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Smoke test
+        run: node dist/cli.js --stats .
+
+  build-mcp:
+    name: Build MCP server
+    runs-on: ubuntu-latest
+    needs: [build-devpulse, build-codemap]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Build devpulse (dependency)
+        working-directory: tools/devpulse
+        run: npm ci && npm run build
+
+      - name: Build codemap (dependency)
+        working-directory: tools/codemap
+        run: npm install && npm run build
+
+      - name: Install MCP server dependencies
+        working-directory: tools/mcp
+        run: npm install
+
+      - name: Build MCP server
+        working-directory: tools/mcp
+        run: npm run build
+
+      - name: Typecheck MCP server
+        working-directory: tools/mcp
         run: npm run typecheck
