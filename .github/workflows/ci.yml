@@ -11,6 +11,10 @@ jobs:
     name: Build & Typecheck
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: tools/devpulse
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -20,6 +24,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
+          cache-dependency-path: tools/devpulse/package-lock.json
 
       - name: Install dependencies
         run: npm ci
