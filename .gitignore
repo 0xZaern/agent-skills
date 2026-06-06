@@ -1,0 +1,36 @@
+# dependencies
+node_modules/
+src/frontend/node_modules/
+
+# build output
+dist/
+
+# disk cache
+.cache/
+devpulse-cache.db
+devpulse-cache.db-shm
+devpulse-cache.db-wal
+
+# web dashboard / backend (excluded from published repo)
+src/frontend/
+src/backend/
+src/shared/
+api/
+vercel.json
+.vercel/
+tsconfig.backend.json
+tsconfig.api.json
+scripts/postbuild-backend.js
+BACKEND.md
+
+# environment
+.env
+.env.local
+.env.production
+
+# editor / OS
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
