@@ -1,0 +1,48 @@
+{
+  "name": "devpulse",
+  "version": "1.0.0",
+  "description": "Token-efficient GitHub repo context for AI agents and CLIs",
+  "private": false,
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "type": "module",
+  "main": "dist/lib/index.js",
+  "types": "dist/lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/lib/index.js",
+      "types": "./dist/lib/index.d.ts"
+    }
+  },
+  "bin": {
+    "devpulse": "dist/cli.js"
+  },
+  "files": [
+    "dist/lib",
+    "dist/cli.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.lib.json",
+    "typecheck": "tsc -p tsconfig.lib.json --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "github",
+    "cli",
+    "ai",
+    "llm",
+    "context",
+    "digest",
+    "repo",
+    "developer-tools"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.5.3"
+  }
+}
