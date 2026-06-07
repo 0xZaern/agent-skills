@@ -1,6 +1,6 @@
-# agent-tools-mcp
+# agent-skills-mcp
 
-An MCP (Model Context Protocol) server that exposes the [agent-tools](../../README.md) collection as native tools for MCP-compatible editors and AI workflows.
+An MCP (Model Context Protocol) server that exposes the [agent-skills](../../README.md) collection as native tools for MCP-compatible editors and AI workflows.
 
 Connect it once, and any MCP-compatible client gets direct access to `repo_digest` and `codemap` — no extra scripts, no shell commands.
 
@@ -19,17 +19,17 @@ Connect it once, and any MCP-compatible client gets direct access to `repo_diges
 
 ```sh
 # Clone the repo
-git clone https://github.com/0xZaern/agent-tools.git
-cd agent-tools
+git clone https://github.com/0xZaern/agent-skills.git
+cd agent-skills
 
 # Build codemap (dependency)
-cd tools/codemap && npm install && npm run build && cd ../..
+cd skills/codemap && npm install && npm run build && cd ../..
 
 # Build devpulse (dependency)
-cd tools/devpulse && npm install && npm run build && cd ../..
+cd skills/devpulse && npm install && npm run build && cd ../..
 
 # Build the MCP server
-cd tools/mcp && npm install && npm run build && cd ../..
+cd skills/mcp && npm install && npm run build && cd ../..
 ```
 
 ---
@@ -41,15 +41,15 @@ Add this to your MCP client's config (works with any MCP-compatible editor or wo
 ```json
 {
   "mcpServers": {
-    "agent-tools": {
+    "agent-skills": {
       "command": "node",
-      "args": ["/absolute/path/to/agent-tools/tools/mcp/dist/server.js"]
+      "args": ["/absolute/path/to/agent-skills/skills/mcp/dist/server.js"]
     }
   }
 }
 ```
 
-Replace `/absolute/path/to/agent-tools` with the actual path where you cloned the repo.
+Replace `/absolute/path/to/agent-skills` with the actual path where you cloned the repo.
 
 After restarting your client, the `repo_digest` and `codemap` tools will be available natively.
 
