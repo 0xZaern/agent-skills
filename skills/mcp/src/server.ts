@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * agent-tools MCP server
+ * agent-skills MCP server
  *
- * Exposes the agent-tools collection (devpulse, codemap) as native MCP tools
+ * Exposes the agent-skills collection (devpulse, codemap) as native MCP tools
  * for MCP-compatible editors and AI workflows.
  *
  * Transport: stdio (reads from stdin, writes to stdout).
@@ -19,7 +19,7 @@ import { getCodemap, formatJson as mapJson, formatMarkdown as mapMd, formatText 
 // ---------------------------------------------------------------------------
 
 const server = new McpServer(
-  { name: "agent-tools", version: "1.0.0" },
+  { name: "agent-skills", version: "1.0.0" },
   {
     capabilities: {
       tools: {},

@@ -1,7 +1,7 @@
 {
-  "name": "agent-tools-mcp",
+  "name": "agent-skills-mcp",
   "version": "1.0.0",
-  "description": "MCP server exposing agent-tools (devpulse, codemap) as native tools for MCP-compatible editors and AI workflows",
+  "description": "MCP server exposing agent-skills (devpulse, codemap) as native tools for MCP-compatible editors and AI workflows",
   "private": false,
   "license": "MIT",
   "engines": {
@@ -10,7 +10,7 @@
   "type": "module",
   "main": "dist/server.js",
   "bin": {
-    "agent-tools-mcp": "dist/server.js"
+    "agent-skills-mcp": "dist/server.js"
   },
   "files": [
     "dist/server.js",
