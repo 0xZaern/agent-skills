@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/devpulse?style=flat-square)](https://www.npmjs.com/package/devpulse)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](./LICENSE)
 [![Node.js >=18](https://img.shields.io/badge/node-%3E%3D18-blue?style=flat-square)](https://nodejs.org)
-[![CI](https://img.shields.io/github/actions/workflow/status/0xZaern/agent-tools/ci.yml?branch=main&style=flat-square)](https://github.com/0xZaern/agent-tools/actions)
+[![CI](https://img.shields.io/github/actions/workflow/status/0xZaern/agent-skills/ci.yml?branch=main&style=flat-square)](https://github.com/0xZaern/agent-skills/actions)
 
 **Token-efficient GitHub repository context for AI agents and CLIs.**
 
