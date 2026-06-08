@@ -1,20 +1,20 @@
 # dependencies
 node_modules/
-tools/*/node_modules/
+skills/*/node_modules/
 
 # build output
 dist/
-tools/*/dist/
+skills/*/dist/
 
 # disk cache
 .cache/
 devpulse-cache.db
 devpulse-cache.db-shm
 devpulse-cache.db-wal
-tools/devpulse/.cache/
-tools/devpulse/devpulse-cache.db
-tools/devpulse/devpulse-cache.db-shm
-tools/devpulse/devpulse-cache.db-wal
+skills/devpulse/.cache/
+skills/devpulse/devpulse-cache.db
+skills/devpulse/devpulse-cache.db-shm
+skills/devpulse/devpulse-cache.db-wal
 
 # web dashboard / backend (excluded from published repo)
 src/frontend/
