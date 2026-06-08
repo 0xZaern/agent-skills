@@ -1,7 +1,7 @@
 {
   "name": "agent-skills-mcp",
   "version": "1.0.0",
-  "description": "MCP server exposing agent-skills (devpulse, codemap) as native tools for MCP-compatible editors and AI workflows",
+  "description": "MCP server exposing agent-skills (devpulse, codemap, apiscout, auditsnap) as native tools for MCP-compatible editors and AI workflows",
   "private": false,
   "license": "MIT",
   "engines": {
@@ -33,6 +33,8 @@
   ],
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
+    "apiscout": "file:../apiscout",
+    "auditsnap": "file:../auditsnap",
     "codemap": "file:../codemap",
     "devpulse": "file:../devpulse"
   },

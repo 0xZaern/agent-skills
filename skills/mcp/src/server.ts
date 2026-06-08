@@ -13,6 +13,8 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { z } from "zod";
 import { getRepoDigest, formatJson as digestJson, formatMarkdown as digestMd, formatText as digestText } from "devpulse";
 import { getCodemap, formatJson as mapJson, formatMarkdown as mapMd, formatText as mapText } from "codemap";
+import { getApiDigest, formatJson as apiJson, formatMarkdown as apiMd, formatText as apiText } from "apiscout";
+import { getAuditDigest, formatJson as auditJson, formatMarkdown as auditMd, formatText as auditText } from "auditsnap";
 
 // ---------------------------------------------------------------------------
 // Server setup
@@ -121,6 +123,101 @@ server.tool(
         break;
       default:
         output = mapJson(codemap);
+    }
+
+    return {
+      content: [{ type: "text" as const, text: output }],
+    };
+  }
+);
+
+// ---------------------------------------------------------------------------
+// Tool: apiscout
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "apiscout",
+  "Produce a token-efficient digest of an OpenAPI or Swagger spec. Returns endpoint summaries grouped by tag, auth schemes, parameter tables, and schema field lists — at a fraction of the raw spec token cost. Accepts a local file path or a URL.",
+  {
+    source: z
+      .string()
+      .describe("Path to a local OpenAPI/Swagger file, or a URL (http/https)"),
+    format: z
+      .enum(["json", "md", "text"])
+      .optional()
+      .describe("Output format: json (default, compact), md (markdown), text (plain)"),
+    maxTokens: z
+      .number()
+      .int()
+      .positive()
+      .optional()
+      .describe("Soft token budget — trims the digest to approximately this many tokens"),
+    endpoint: z
+      .string()
+      .optional()
+      .describe("Drill into a single path, e.g. /users/{id}. Returns only operations for that path."),
+  },
+  async (args) => {
+    const { source, format = "json", maxTokens, endpoint } = args;
+
+    const digest = await getApiDigest(source, { format, maxTokens, endpoint });
+
+    let output: string;
+    switch (format) {
+      case "md":
+        output = apiMd(digest);
+        break;
+      case "text":
+        output = apiText(digest);
+        break;
+      default:
+        output = apiJson(digest);
+    }
+
+    return {
+      content: [{ type: "text" as const, text: output }],
+    };
+  }
+);
+
+// ---------------------------------------------------------------------------
+// Tool: auditsnap
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "auditsnap",
+  "Produce a token-efficient digest of npm audit output. Runs npm audit --json in the target directory and returns a ranked vulnerability list sorted by severity with fix-available flags and direct/transitive labels — at a fraction of the raw audit output token cost.",
+  {
+    dir: z
+      .string()
+      .optional()
+      .describe("Absolute path to the directory to run npm audit in. Defaults to current working directory."),
+    format: z
+      .enum(["json", "md", "text"])
+      .optional()
+      .describe("Output format: json (default, compact), md (markdown), text (plain)"),
+    maxTokens: z
+      .number()
+      .int()
+      .positive()
+      .optional()
+      .describe("Soft token budget — trims the digest to approximately this many tokens"),
+  },
+  async (args) => {
+    const { dir = ".", format = "json", maxTokens } = args;
+
+    const digest = await getAuditDigest({ dir, format, maxTokens });
+
+    let output: string;
+    switch (format) {
+      case "md":
+        output = auditMd(digest);
+        break;
+      case "text":
+        output = auditText(digest);
+        break;
+      default:
+        output = auditJson(digest);
     }
 
     return {
