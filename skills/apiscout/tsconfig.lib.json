@@ -11,9 +11,10 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "declaration": false,
+    "declaration": true,
+    "declarationMap": true,
     "sourceMap": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/lib/**/*", "src/cli.ts"],
   "exclude": ["node_modules", "dist"]
 }
