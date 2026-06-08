@@ -1,0 +1,49 @@
+{
+  "name": "auditsnap",
+  "version": "1.0.0",
+  "description": "Token-efficient npm audit digest for AI agents — ranked vulnerability summary with severity, fix availability, and direct/transitive split",
+  "private": false,
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "type": "module",
+  "main": "dist/lib/index.js",
+  "types": "dist/lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/lib/index.js",
+      "types": "./dist/lib/index.d.ts"
+    }
+  },
+  "bin": {
+    "auditsnap": "dist/cli.js"
+  },
+  "files": [
+    "dist/lib",
+    "dist/cli.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.lib.json",
+    "typecheck": "tsc -p tsconfig.lib.json --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "cli",
+    "ai",
+    "llm",
+    "mcp",
+    "npm-audit",
+    "security",
+    "vulnerabilities",
+    "context",
+    "developer-tools"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.5.3"
+  }
+}
