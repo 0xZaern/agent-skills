@@ -17,7 +17,7 @@ A collection of small, focused skills that help AI agents and LLMs work with cod
 
 ## MCP Server
 
-[**skills/mcp**](./skills/mcp) is an MCP (Model Context Protocol) server that exposes both skills above as native MCP tools for MCP-compatible editors and AI workflows.
+[**skills/mcp**](./skills/mcp) is an MCP (Model Context Protocol) server that exposes the skills above as native MCP tools for MCP-compatible editors and AI workflows.
 
 Register it once in your MCP client config:
 
