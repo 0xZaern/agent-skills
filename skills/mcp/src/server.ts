@@ -15,6 +15,7 @@ import { getRepoDigest, formatJson as digestJson, formatMarkdown as digestMd, fo
 import { getCodemap, formatJson as mapJson, formatMarkdown as mapMd, formatText as mapText } from "codemap";
 import { getApiDigest, formatJson as apiJson, formatMarkdown as apiMd, formatText as apiText } from "apiscout";
 import { getAuditDigest, formatJson as auditJson, formatMarkdown as auditMd, formatText as auditText } from "auditsnap";
+import { getSecretScanDigest, formatJson as secretJson, formatMarkdown as secretMd, formatText as secretText } from "secretscan";
 
 // ---------------------------------------------------------------------------
 // Server setup
@@ -218,6 +219,59 @@ server.tool(
         break;
       default:
         output = auditJson(digest);
+    }
+
+    return {
+      content: [{ type: "text" as const, text: output }],
+    };
+  }
+);
+
+// ---------------------------------------------------------------------------
+// Tool: secretscan
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "secretscan",
+  "Scan a git repository for leaked secrets and credentials before they reach the remote. Checks staged files (default), tracked files, or the full tree against patterns for AWS keys, OpenAI/Stripe keys, GitHub tokens, JWTs, private key blocks, bearer tokens, hardcoded passwords, and connection strings. Never prints full secret values — output masks to first/last 4 characters. Returns a structured findings list with file, line, secret type, severity. Clean result means safe to commit.",
+  {
+    dir: z
+      .string()
+      .optional()
+      .describe("Absolute path to the git repository root to scan. Defaults to current working directory."),
+    source: z
+      .enum(["staged", "tracked", "all"])
+      .optional()
+      .describe('Which files to scan: "staged" (default, ideal for pre-commit), "tracked" (all git-tracked files), "all" (tracked + untracked, respecting .gitignore)'),
+    format: z
+      .enum(["json", "md", "text"])
+      .optional()
+      .describe("Output format: json (default, compact), md (markdown), text (plain)"),
+    entropy: z
+      .boolean()
+      .optional()
+      .describe("Enable Shannon entropy check to flag high-entropy strings that may be unlabelled secrets (off by default)"),
+    entropyThreshold: z
+      .number()
+      .positive()
+      .optional()
+      .describe("Minimum Shannon entropy (bits per character) to flag when --entropy is enabled. Defaults to 4.5."),
+  },
+  async (args) => {
+    const { dir = ".", source = "staged", format = "json", entropy, entropyThreshold } = args;
+
+    const digest = await getSecretScanDigest({ dir, source, format, entropy, entropyThreshold });
+
+    let output: string;
+    switch (format) {
+      case "md":
+        output = secretMd(digest);
+        break;
+      case "text":
+        output = secretText(digest);
+        break;
+      default:
+        output = secretJson(digest);
     }
 
     return {
