@@ -258,15 +258,15 @@ Next.js CHANGELOG.md: ≈ 180,000 tokens raw → digest ≈ 2,500 tokens = **98.
 
 ## Ranked Proposal (Value-to-Effort)
 
-| Rank | Skill | Value | Effort | Score |
-|------|-------|-------|--------|-------|
-| 1 | **apiscout** | Very High | Low | 5/5 |
-| 2 | **auditsnap** | High | Low | 4.5/5 |
-| 3 | **diffdigest** | High | Low-Med | 4/5 |
-| 4 | **releasemap** | High | Low | 4/5 |
-| 5 | **schemamap** | High | Med | 3.5/5 |
-| 6 | **errorlens** | Med-High | Med | 3/5 |
-| 7 | **depgraph** | Med | Med | 2.5/5 |
+| Rank | Skill | Value | Effort | Score | Status |
+|------|-------|-------|--------|-------|--------|
+| 1 | **apiscout** | Very High | Low | 5/5 | shipped |
+| 2 | **auditsnap** | High | Low | 4.5/5 | shipped |
+| 3 | **diffdigest** | High | Low-Med | 4/5 | — |
+| 4 | **releasemap** | High | Low | 4/5 | — |
+| 5 | **schemamap** → **schemadiff** | High | Med | 3.5/5 | shipped |
+| 6 | **errorlens** → **logfold** | Med-High | Med | 3/5 | shipped |
+| 7 | **depgraph** | Med | Med | 2.5/5 | — |
 
 ### Scoring rationale
 
@@ -287,6 +287,12 @@ Next.js CHANGELOG.md: ≈ 180,000 tokens raw → digest ≈ 2,500 tokens = **98.
 ---
 
 ## Top 3 Recommendations
+
+### Status
+
+`apiscout`, `auditsnap`, `schemadiff`, and `logfold` are all built and shipped. See `skills/schemadiff/` and `skills/logfold/` for implementation details. The remaining candidates (`diffdigest`, `releasemap`, `depgraph`) are unbuilt.
+
+---
 
 ### Build first: `apiscout`
 
