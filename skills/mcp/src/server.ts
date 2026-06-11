@@ -16,6 +16,8 @@ import { getCodemap, formatJson as mapJson, formatMarkdown as mapMd, formatText 
 import { getApiDigest, formatJson as apiJson, formatMarkdown as apiMd, formatText as apiText } from "apiscout";
 import { getAuditDigest, formatJson as auditJson, formatMarkdown as auditMd, formatText as auditText } from "auditsnap";
 import { getSecretScanDigest, formatJson as secretJson, formatMarkdown as secretMd, formatText as secretText } from "secretscan";
+import { getSchemaDigest, formatJson as schemaJson, formatMarkdown as schemaMd, formatText as schemaText } from "schemadiff";
+import { getLogDigest, formatJson as logJson, formatMarkdown as logMd, formatText as logText } from "logfold";
 
 // ---------------------------------------------------------------------------
 // Server setup
@@ -272,6 +274,112 @@ server.tool(
         break;
       default:
         output = secretJson(digest);
+    }
+
+    return {
+      content: [{ type: "text" as const, text: output }],
+    };
+  }
+);
+
+// ---------------------------------------------------------------------------
+// Tool: schemadiff
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "schemadiff",
+  "Produce a token-efficient digest of a database schema. Reads a Prisma schema.prisma, SQL DDL file, or Drizzle TypeScript schema and returns a compact ERD-style digest with entities, fields (name, type, nullable, PK/unique), foreign-key relations, and indexes — at a fraction of the raw schema token cost.",
+  {
+    source: z
+      .string()
+      .describe(
+        "Path to a schema file or directory (schema.prisma, *.sql, *.ddl, drizzle *.ts, or a migrations/ directory)"
+      ),
+    format: z
+      .enum(["json", "md", "text"])
+      .optional()
+      .describe("Output format: json (default, compact), md (markdown), text (plain)"),
+    maxTokens: z
+      .number()
+      .int()
+      .positive()
+      .optional()
+      .describe("Soft token budget — trims the digest to approximately this many tokens"),
+    model: z
+      .string()
+      .optional()
+      .describe("Drill into a single entity/table by name"),
+    parser: z
+      .enum(["prisma", "sql", "drizzle"])
+      .optional()
+      .describe("Force a specific parser. Auto-detected from extension and content by default."),
+  },
+  async (args) => {
+    const { source, format = "json", maxTokens, model, parser } = args;
+
+    const digest = await getSchemaDigest(source, { format, maxTokens, model, parser });
+
+    let output: string;
+    switch (format) {
+      case "md":
+        output = schemaMd(digest);
+        break;
+      case "text":
+        output = schemaText(digest);
+        break;
+      default:
+        output = schemaJson(digest);
+    }
+
+    return {
+      content: [{ type: "text" as const, text: output }],
+    };
+  }
+);
+
+// ---------------------------------------------------------------------------
+// Tool: logfold
+// ---------------------------------------------------------------------------
+
+server.tool(
+  "logfold",
+  "Produce a token-efficient digest of error logs and stack traces. Reads a log file, deduplicates repeated errors, folds node_modules/stdlib/site-packages noise out of each stack trace, groups by error signature, counts occurrences, and records first/last timestamps — returning a compact structured summary at a fraction of the raw log token cost. Supports Node.js, Python, Java, and generic log formats.",
+  {
+    source: z
+      .string()
+      .describe("Absolute or relative path to a log file"),
+    format: z
+      .enum(["json", "md", "text"])
+      .optional()
+      .describe("Output format: json (default, compact), md (markdown), text (plain)"),
+    maxTokens: z
+      .number()
+      .int()
+      .positive()
+      .optional()
+      .describe("Soft token budget — trims the digest to approximately this many tokens"),
+    top: z
+      .number()
+      .int()
+      .positive()
+      .optional()
+      .describe("Show only the top N most-frequent error groups"),
+  },
+  async (args) => {
+    const { source, format = "json", maxTokens, top } = args;
+
+    const digest = await getLogDigest(source, { format, maxTokens, top });
+
+    let output: string;
+    switch (format) {
+      case "md":
+        output = logMd(digest);
+        break;
+      case "text":
+        output = logText(digest);
+        break;
+      default:
+        output = logJson(digest);
     }
 
     return {
